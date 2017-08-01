@@ -15,7 +15,6 @@ public class BestTimetoBuyandSell {
 		int max = 0;
 		for (int i = 1; i < price.length; i++) {
 			if (price[i] > tempmixprice) {
-
 				max = Math.max(max, price[i] - tempmixprice);
 			} else
 				tempmixprice = price[i];
@@ -62,6 +61,7 @@ public class BestTimetoBuyandSell {
 	}
 	/****
 	 *  you can only have 2 times to transact
+	 * 
 	 * @param p
 	 * @return
 	 */
@@ -69,16 +69,17 @@ public class BestTimetoBuyandSell {
 		if (p.length < 2) {
 			return 0;
 		}
-		int firstbuy = p[0];
+		int firstbuy = -p[0];
 		int firstsell = 0;
-		int secondbuy = p[0];
-		int second = 0;
+		int secondbuy = -p[0];
+		int secondsell = 0;
 		for(int i = 1; i < p.length; i++){
-			
-			
-		}
-		
-	
+			if (firstbuy < -p[i]) firstbuy = -p[i];
+			if (firstsell < p[i]+ firstbuy)  firstsell = p[i] + firstbuy;
+			if(secondbuy < firstsell - p[i]) secondbuy = firstsell - p[i];
+			if(secondsell < secondbuy + p[i]) secondsell = secondbuy + p[i];
+		}	
+		return secondsell;
 		
 	}
 	
@@ -110,7 +111,7 @@ public class BestTimetoBuyandSell {
 			int tempMax = t[i-1][0] - p[0];
 			for (int j = 1; j < p.length; j++) {
 				t[i][j] = Math.max(t[i][j - 1], p[j] + tempMax);
-				tempMax = Math.max(t[i - 1][j - 1] - p[j], tempMax);
+				tempMax = Math.max(t[i - 1][j] - p[j], tempMax);
 			}
 		}
 		return t[k][p.length - 1];
